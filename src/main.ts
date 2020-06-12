@@ -6,6 +6,7 @@ import { createConnection } from 'typeorm';
 import { CategoryController, ProductsController } from './controllers';
 import { CategoryEntity, ImageEntity, ProductEntity } from './entities';
 
+const isProduction = process.env.NODE_ENV === 'prod';
 const HOST = process.env.HOST || '127.0.0.1';
 const PORT = +(process.env.PORT || '8080');
 
@@ -20,13 +21,24 @@ async function run(): Promise<void> {
     app.use('/static', express.static(resolve(__dirname, 'static')));
     app.use('/api', bodyParser.json());
 
-    // Connect to database; ensure every entity table is properly initialized
-    await createConnection({
-        type: 'sqlite',
-        database: './db.sql',
-        entities: [CategoryEntity, ImageEntity, ProductEntity],
-        synchronize: true
-    });
+    // Connect to database; to ensure every entity table is properly initialized
+    if (isProduction) {
+        const dbConfigBase = require(resolve(__dirname, '../ormconfig.json'));
+        const dbConfig = {
+            ...dbConfigBase,
+            entities: [CategoryEntity, ImageEntity, ProductEntity],
+            synchronize: true
+        };
+
+        await createConnection(dbConfig);
+    } else {
+        await createConnection({
+            type: 'sqlite',
+            database: './db.sql',
+            entities: [CategoryEntity, ImageEntity, ProductEntity],
+            synchronize: true
+        });
+    }
 
     CategoryController.register(app, '/api/categories');
     ProductsController.register(app, '/api/products');

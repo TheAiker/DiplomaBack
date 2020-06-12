@@ -5,8 +5,8 @@
     "license": "MIT",
     "scripts": {
         "build": "webpack --color --progress --mode production",
-        "start": "node dist/server.js",
-        "start.watch": "nodemon dist/server.js",
+        "start": "NODE_ENV=prod node dist/server.js",
+        "start.watch": "NODE_ENV=dev nodemon dist/server.js",
         "watch": "webpack --color --progress --mode development --watch"
     },
     "dependencies": {

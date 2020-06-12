@@ -1,0 +1,4 @@
+.vscode
+db.sql
+dist
+node_modules

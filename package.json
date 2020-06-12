@@ -1,0 +1,36 @@
+{
+    "name": "ecommerce-back",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "build": "webpack --color --progress --mode production",
+        "start": "node dist/server.js",
+        "start.watch": "nodemon dist/server.js",
+        "watch": "webpack --color --progress --mode development --watch"
+    },
+    "dependencies": {
+        "@types/lodash": "^4.14.152",
+        "body-parser": "^1.19.0",
+        "express": "^4.17.1",
+        "lodash": "^4.17.15",
+        "mkdirp": "^1.0.4",
+        "multer": "^1.4.2",
+        "sharp": "^0.25.3",
+        "sqlite3": "^4.2.0",
+        "typeorm": "^0.2.25"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.6",
+        "@types/mkdirp": "^1.0.1",
+        "@types/multer": "^1.4.3",
+        "@types/node": "^14.0.5",
+        "@types/sharp": "^0.25.0",
+        "nodemon": "^2.0.4",
+        "ts-loader": "^7.0.5",
+        "typescript": "^3.9.3",
+        "webpack": "^4.43.0",
+        "webpack-cli": "^3.3.11",
+        "webpack-node-externals": "^1.7.2"
+    }
+}

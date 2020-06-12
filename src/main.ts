@@ -6,7 +6,7 @@ import { createConnection } from 'typeorm';
 import { CategoryController, ProductsController } from './controllers';
 import { CategoryEntity, ImageEntity, ProductEntity } from './entities';
 
-const isProduction = process.env.NODE_ENV === 'prod';
+const isProduction = process.env.APP_ENV === 'prod';
 const HOST = process.env.HOST || '127.0.0.1';
 const PORT = +(process.env.PORT || '8080');
 
@@ -18,15 +18,19 @@ async function run(): Promise<void> {
 
     await ensureDirectoryExists('static/preview-uploads');
 
+    // Serve static files from /static route
     app.use('/static', express.static(resolve(__dirname, 'static')));
+
+    // Parse application/json requests
     app.use('/api', bodyParser.json());
 
-    // Connect to database; to ensure every entity table is properly initialized
+    // Connect to database
+    const entities = [CategoryEntity, ImageEntity, ProductEntity];
     if (isProduction) {
         const dbConfigBase = require(resolve(__dirname, '../ormconfig.json'));
         const dbConfig = {
             ...dbConfigBase,
-            entities: [CategoryEntity, ImageEntity, ProductEntity],
+            entities,
             synchronize: true
         };
 
@@ -35,7 +39,7 @@ async function run(): Promise<void> {
         await createConnection({
             type: 'sqlite',
             database: './db.sql',
-            entities: [CategoryEntity, ImageEntity, ProductEntity],
+            entities,
             synchronize: true
         });
     }

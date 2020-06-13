@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColu
 import { CategoryEntity } from './category.entity';
 import { ImageEntity } from './image.entity';
 
-@Entity()
+@Entity('products')
 export class ProductEntity extends BaseEntity {
 
     @PrimaryGeneratedColumn()

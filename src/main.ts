@@ -27,7 +27,7 @@ async function run(): Promise<void> {
     // Connect to database
     const entities = [CategoryEntity, ImageEntity, ProductEntity];
     if (isProduction) {
-        const dbConfigBase = require(resolve(__dirname, '../ormconfig.json'));
+        const dbConfigBase = require('../ormconfig.json');
         const dbConfig = {
             ...dbConfigBase,
             entities,
@@ -52,4 +52,4 @@ async function run(): Promise<void> {
     console.log('Server is up and ready to serve');
 }
 
-run();
+run().catch(console.error);

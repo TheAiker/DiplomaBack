@@ -25,6 +25,7 @@ export class ProductsController {
 
         this.router.get('/', this.getProducts);
         this.router.post('/create', this.createProduct);
+        this.router.post('/delete', this.deleteProduct);
         this.router.post('/preview-upload', this.multer.single('previewImage'), this.uploadProductPreview);
 
         this.app.use(this.routePrefix, this.router);
@@ -66,6 +67,27 @@ export class ProductsController {
             await newProduct.save();
 
             handleResponse(response, newProduct);
+        } catch (error) {
+            handleResponse(response, error);
+        }
+    };
+
+    deleteProduct = async (request: Request, response: Response) => {
+        try {
+            const { productId } = request.body;
+
+            checkIfProvided(request.body, 'productId');
+            checkIfValidNumber(request.body, 'productId');
+
+            const foundProduct = await ProductEntity.findOne(productId);
+
+            if (!foundProduct) {
+                throw new ValidationError(`Product with id = ${productId} couldn't be found`);
+            }
+
+            await foundProduct.remove();
+
+            handleResponse(response, {});
         } catch (error) {
             handleResponse(response, error);
         }

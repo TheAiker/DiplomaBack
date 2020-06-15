@@ -1,10 +1,14 @@
 import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import mkdirp from 'mkdirp';
 import { resolve } from 'path';
 import { createConnection } from 'typeorm';
-import { CategoryController, ProductsController } from './controllers';
+import { CategoryController, FeedbackController, ProductsController } from './controllers';
 import { CategoryEntity, ImageEntity, ProductEntity } from './entities';
+import { mailFeedbackService } from './services';
+
+dotenv.config();
 
 const isProduction = process.env.APP_ENV === 'prod';
 const HOST = process.env.HOST || '127.0.0.1';
@@ -44,7 +48,10 @@ async function run(): Promise<void> {
         });
     }
 
+    await mailFeedbackService.init();
+
     CategoryController.register(app, '/api/categories');
+    FeedbackController.register(app, '/api/feedback');
     ProductsController.register(app, '/api/products');
 
     // Start listening for requests on given port

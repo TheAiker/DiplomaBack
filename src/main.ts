@@ -4,9 +4,9 @@ import express, { Request, Response } from 'express';
 import mkdirp from 'mkdirp';
 import { resolve } from 'path';
 import { createConnection } from 'typeorm';
-import { CategoryController, FeedbackController, ProductsController } from './controllers';
+import { CategoryController, FeedbackController, ProductsController, OrderController } from './controllers';
 import { CategoryEntity, ImageEntity, ProductEntity } from './entities';
-import { mailFeedbackService } from './services';
+import { mailService } from './services';
 
 dotenv.config();
 
@@ -48,11 +48,12 @@ async function run(): Promise<void> {
         });
     }
 
-    await mailFeedbackService.init();
+    await mailService.init();
 
     CategoryController.register(app, '/api/categories');
     FeedbackController.register(app, '/api/feedback');
     ProductsController.register(app, '/api/products');
+    OrderController.register(app, '/api/orders');
 
     // Start listening for requests on given port
     app.listen(PORT, HOST);

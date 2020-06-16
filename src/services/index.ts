@@ -1,1 +1,1 @@
-export * from './mail-feedback.service';
+export * from './mail.service';

@@ -1,7 +1,7 @@
 import { Application, Router, Request, Response } from 'express';
 import { get as lodashGet } from 'lodash';
 import { CategoryEntity, ProductEntity } from '../entities';
-import { mailFeedbackService } from '../services';
+import { mailService } from '../services';
 import { checkIfProvided, checkIfValidNumber, handleResponse, ValidationError } from '../utils';
 
 export class FeedbackController {
@@ -26,7 +26,7 @@ export class FeedbackController {
             checkIfProvided(request.body, 'email');
             checkIfProvided(request.body, 'message');
 
-            await mailFeedbackService.sendFeedback(name, email, message);
+            await mailService.sendFeedback(name, email, message);
 
             handleResponse(response, {});
         } catch (error) {
